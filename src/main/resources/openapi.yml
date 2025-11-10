@@ -122,7 +122,7 @@ components:
           example: "Mensaje de error"
   responses:
     BadRequestResponse:
-      description: Bad Request. No existe valor guardado en caché.
+      description: Bad Request. Error con los datos.
       content:
         application/json:
           schema:

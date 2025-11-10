@@ -17,8 +17,8 @@ con validación de email y contraseña.
 
 
 ```bash
-git clone https://github.com/devduv/pruebatecnica-bci
-cd pruebatecnica-bci
+git clone https://github.com/devduv/api-user-creation-bci
+cd api-user-creation-bci
 ```
 
 ---
@@ -48,7 +48,7 @@ mvn spring-boot:run
 también puede ejecutar el `.jar` generado:
 
 ```bash
-java -jar target/proyecto-registro-usuarios-0.0.1-SNAPSHOT.jar
+java -jar target/pruebatecnica-0.0.1.jar
 ```
 
 > Por defecto, la API se ejecutará en:  
@@ -91,16 +91,21 @@ El contrato del API se encuentra disponible en:
 
 ---
 
-## Endpoint Disponible
+## Property configurable
+Para la validación del patrón de contraseña configurable en el application.yml:
+```
+password-pattern: ^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&._-])[A-Za-z\d@$!%*?&._-]{6,15}$
+```
+
+## Endpoint
 
 ### **POST /users/register**
 
 Permite crear un usuario registrando el nombre, email, contraseña y números de celular, validando previamente que el correo no exista.
 
-```bash
+```curl
 curl --location 'http://localhost:8080/users/register' \
 --header 'Content-Type: application/json' \
---header 'Cookie: JSESSIONID=2F2D6AC58B6BA8515194F383BE835342' \
 --data-raw '{
     "name": "BRANDON DUVAN a FALCON",
     "email": "duvanbradbrid2@gmailcom",
@@ -149,7 +154,28 @@ curl --location 'http://localhost:8080/users/register' \
 
 ---
 
+## Diagrama de solución
+![diagrama](https://github.com/devduv/api-user-creation-bci/blob/master/user-creation-api.drawio.png)
+---
 ## Desarrollador
 
 **Brandon Duvan Saenz Falcon**  
 Senior Java Developer | Contacto: duvanbradbrid@gmail.com
+
+## Requisitos
+Se cumplen los requisitos indicados:
+
+- Responder el código de status HTTP adecuado.
+- En caso de éxito, retorna los datos de  token, fecha y activo.
+- En caso el correo exista en la base de datos, retorna un error 
+- El correo se valida según expresión regular. 
+- La clave se valida según expresión regular (configurable)
+- El token es persistido junto con el usuario.
+- Se usa H2, bd en memoria.
+- Build en Maven.
+- Persistencia con JPA.
+- Proyecto desarrollado en Spring Boot.
+- Java8+ (Se usó Java 21)
+- Repositorio en Github.
+- Readme.
+- Diagrama

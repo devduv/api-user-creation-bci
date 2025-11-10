@@ -22,8 +22,7 @@ public class UsersApiImpl implements UsersApi {
    * @return Create user successfully with status code 201
    */
   @Override
-  public ResponseEntity<UserRegistrationResponse> registerUser(
-      UserRegistrationRequest request) {
+  public ResponseEntity<UserRegistrationResponse> registerUser(UserRegistrationRequest request) {
     UserRegistrationResponse response = userRegistrationService.registerUser(request);
     return new ResponseEntity<>(response, HttpStatus.CREATED);
   }

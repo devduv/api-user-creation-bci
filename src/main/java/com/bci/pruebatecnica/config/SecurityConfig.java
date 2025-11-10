@@ -9,9 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
-/**
- * Security config.
- */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -34,18 +31,5 @@ public class SecurityConfig {
         );
 
     return http.build();
-  }
-
-  /**
-   * Authentication manager.
-   *
-   * @param authenticationConfiguration authentication configuration
-   * @return authentication manager
-   * @throws Exception exception
-   */
-  @Bean
-  public AuthenticationManager authenticationManager(
-      AuthenticationConfiguration authenticationConfiguration) throws Exception {
-    return authenticationConfiguration.getAuthenticationManager();
   }
 }
