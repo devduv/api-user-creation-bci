@@ -1,0 +1,4 @@
+spring:
+  application:
+    name: pruebatecnica
+password-pattern: ^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&._-])[A-Za-z\d@$!%*?&._-]{6,15}$

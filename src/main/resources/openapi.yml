@@ -1,0 +1,129 @@
+openapi: 3.0.0
+servers:
+  - description: Server
+    url: http://localhost:8080
+info:
+  description: Permite crear usuarios.
+  version: "1.0.0"
+  title: User Creation API
+tags:
+  - name: User Registration
+    description: User Registration Controller
+paths:
+  /users/register:
+    post:
+      tags:
+        - User Registration
+      summary: Crear usuario.
+      description: "Permite crear un usuario registrando el nombre, email, contraseña y números de celular, validando previamente que el correo no exista."
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationRequest'
+      responses:
+        201:
+          description: Crea un usuario de forma exitosa.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRegistrationResponse'
+        400:
+          $ref: '#/components/responses/BadRequestResponse'
+components:
+  schemas:
+    PhoneRequest:
+      type: object
+      required:
+        - number
+        - cityCode
+        - countryCode
+      properties:
+        number:
+          type: string
+          description: Número de celular.
+          example: "993420344"
+          maxLength: 20
+        cityCode:
+          type: string
+          description: Código de la ciudad.
+          example: "1"
+          maxLength: 5
+        countryCode:
+          type: string
+          description: Código del pais.
+          example: "51"
+          maxLength: 5
+    UserRegistrationRequest:
+      type: object
+      required:
+        - name
+        - email
+        - password
+        - phones
+      properties:
+        name:
+          type: string
+          description: Nombre del usuario
+          example: "BRANDON DUVAN SAENZ FALCON"
+          pattern: ^[A-Za-zÁÉÍÓÚáéíóúÑñÜüÄËÏÖÜ\s]+$
+          maxLength: 100
+        email:
+          type: string
+          description: Correo del usuario
+          format: email
+          pattern: ^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$
+          example: "duvanbradbrid@gmail.com"
+          maxLength: 150
+        password:
+          type: string
+          description: Contraseña del usuario
+          example: "123456"
+        phones:
+          type: array
+          maxItems: 10
+          items:
+            $ref: "#/components/schemas/PhoneRequest"
+    UserRegistrationResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Código UUID del usuario.
+          example: "1d30b3e3-e6c9-4751-97d8-9755e082f475"
+        created:
+          type: string
+          description: Fecha de creación del usuario.
+          example: "2025-11-09T18:26:00.2087452"
+        modified:
+          type: string
+          description: Fecha de modificación del usuario.
+          example: "2025-11-09T18:26:00.2087452"
+        last_login:
+          type: string
+          description: Fecha del último ingreso del usuario.
+          example: "2025-11-09T18:26:00.2087452"
+        token:
+          type: string
+          description: Token de acceso al API
+          example: ""
+        isActive:
+          type: boolean
+          description: Flag que indica si el usuario se encuentra habilitado.
+          example: true
+    ApiException:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Mensaje del error.
+          example: "Mensaje de error"
+  responses:
+    BadRequestResponse:
+      description: Bad Request. No existe valor guardado en caché.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiException'
