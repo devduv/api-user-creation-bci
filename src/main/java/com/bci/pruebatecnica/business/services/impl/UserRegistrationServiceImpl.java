@@ -52,7 +52,9 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
    */
   private UserEntity buildUserEntity(UserRegistrationRequest request) {
     String token = JwtUtil.generateToken(request.getEmail());
-    return userRegistrationMapper.mapToUserEntity(request, token);
+    UserEntity userEntity = userRegistrationMapper.mapToUserEntity(request, token);
+    userEntity.getPhoneEntities().forEach(phone -> phone.setUser(userEntity));
+    return userEntity;
   }
 
   /**

@@ -56,52 +56,11 @@ java -jar target/pruebatecnica-0.0.1.jar
 
 ---
 
-## Base de Datos
+### 4. Consultar servicio de registro de usuarios
 
-El proyecto utiliza una base de datos **H2 en memoria**, ideal para pruebas y desarrollo.
+#### POST /users/register
 
-Los datos se almacenan temporalmente durante la ejecución y se eliminan al detener la aplicación.
-
----
-
-## Entidad: Usuario
-
-Cada usuario registrado contiene la siguiente información:
-
-| Campo         | Tipo de Dato  | Descripción                     |
-|---------------|---------------|---------------------------------|
-| **id**        | UUID          | Identificador único del usuario |
-| **name**      | String        | Nombre completo del usuario     |
-| **email**     | String        | Correo electrónico del usuario  |
-| **password**  | String        | Contraseña de usuario           |
-| **phones**    | PhoneEntity   | Número de teléfono del usuario  |
-| **created**   | LocalDateTime | Fecha de creación               |
-| **modified**  | LocalDateTime | Fecha de modificación           |
-| **lastLogin** | LocalDateTime | Fecha y hora del último ingreso |
-| **token**     | String        | Token de acceso                 |
-
----
-
-## Contrato OpenAPI / Swagger
-
-El contrato del API se encuentra disponible en:
-
-- Archivo local: [`./openapi.yml`](./openapi.yml)  
-- Documentación interactiva Swagger UI: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
-
----
-
-## Property configurable
-Para la validación del patrón de contraseña configurable en el application.yml:
-```
-password-pattern: ^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&._-])[A-Za-z\d@$!%*?&._-]{6,15}$
-```
-
-## Endpoint
-
-### **POST /users/register**
-
-Permite crear un usuario registrando el nombre, email, contraseña y números de celular, validando previamente que el correo no exista.
+- Permite crear un usuario registrando el nombre, email, contraseña y números de celular, validando previamente que el correo no exista.
 
 ```curl
 curl --location 'http://localhost:8080/users/register' \
@@ -146,6 +105,90 @@ curl --location 'http://localhost:8080/users/register' \
   "token": "string",
   "isActive": true
 }
+```
+
+---
+### 5. Base de Datos
+
+El proyecto utiliza una base de datos **H2 en memoria**.
+
+Los datos se almacenan temporalmente durante la ejecución y se eliminan al detener la aplicación.
+
+- Acceso a la base de datos: http://localhost:8080/h2-console
+- Completar con los siguientes campos:
+
+  | Campo              | Descripción         |
+  |--------------------|---------------------| 
+  | **Driver class**   | org.h2.Driver       |
+  | **JDBC URL**       | jdbc:h2:mem:userdb  |
+  | **User Name**      | sa                  |
+  | **Password**       | password            |
+
+Configurable en el application.yml:
+
+```yml
+spring:
+  datasource:
+    url: jdbc:h2:mem:userdb
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
+```
+---
+![h2console.png](images/h2console.png)
+---
+
+- **Consultar usuarios en h2**
+![h2select.png](images/h2select.png)
+---
+
+## Entidad: Usuario
+
+Cada usuario registrado contiene la siguiente información:
+
+| Campo               | Tipo de Dato  | Descripción                     |
+|---------------------|---------------|---------------------------------|
+| **id**              | UUID          | Identificador único del usuario |
+| **name**            | String        | Nombre completo del usuario     |
+| **email**           | String        | Correo electrónico del usuario  |
+| **password**        | String        | Contraseña de usuario           |
+| **created_date**    | LocalDateTime | Fecha de creación               |
+| **modified_date**   | LocalDateTime | Fecha de modificación           |
+| **last_login_date** | LocalDateTime | Fecha y hora del último ingreso |
+| **access_token**    | String        | Token de acceso                 |
+| **is_active**       | boolean       | Indicador de usuario habilitado |
+
+## Entidad: Celular
+
+Cada usuario registrado tiene una lista de celulares que contiene lo siguiente:
+
+| Campo            | Tipo de Dato  | Descripción                     |
+|------------------|---------------|---------------------------------|
+| **id**           | UUID          | Identificador único del celular |
+| **city_code**    | String        | Código de la ciudad             |
+| **country_code** | String        | Código del país                 |
+| **number**       | String        | Número del celular              |
+| **user_id**      | String        | Identificador del usuarioo      |
+---
+
+## Contrato OpenAPI / Swagger
+
+El contrato del API se encuentra disponible en:
+
+- Archivo local: [`./openapi.yml`](./openapi.yml)  
+- Documentación interactiva Swagger UI: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+
+---
+
+## Property configurable
+Para la validación del patrón de contraseña configurable en el application.yml:
+```
+password-pattern: ^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&._-])[A-Za-z\d@$!%*?&._-]{6,15}$
 ```
 
 **Validaciones:**
